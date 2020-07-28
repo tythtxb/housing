@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.housings.dao.SmokeAlarmDao">
+
+    <select id="findById"  parameterType="SmokeAlarm" resultType="SmokeAlarm">
+        select id, install_date as "installDate", sa_address as "saAddress",
+        userId, detection_date as "detectionDate", smoke_concentration as "smokeConcentration",
+        detection_desc as "detectionDesc" from smoke_alarm
+        where is_delete = 0 AND id = #{id, jdbcType=INTEGER}
+    </select>
+
+    <select id="countItem" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM smoke_alarm
+        WHERE is_delete = 0
+        <if test="userId != null and userId != ''">
+            AND userId = #{userId, jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="SmokeAlarm">
+        INSERT INTO `smoke_alarm` (`install_date`,`sa_address`,`userId`,is_delete,detection_date,smoke_concentration,detection_desc)
+        VALUES
+            (#{installDate},#{saAddress},#{userId},0,#{detectionDate},#{smokeConcentration},#{detectionDesc})
+    </insert>
+
+    <select id="queryAll"  parameterType="SmokeAlarm" resultType="SmokeAlarm">
+        select id, install_date as "installDate", sa_address as "saAddress",
+        userId, detection_date as "detectionDate", smoke_concentration as "smokeConcentration",
+        detection_desc as "detectionDesc" from smoke_alarm
+        where is_delete = 0
+        <if test="userId != null  and userId != ''">
+            AND userId = #{userId, jdbcType=VARCHAR}
+        </if>
+        ORDER BY detectionDate DESC
+        limit #{start, jdbcType=INTEGER},#{end, jdbcType=INTEGER}
+    </select>
+
+    <update id="update" parameterType="SmokeAlarm">
+        update smoke_alarm set
+        <if test="installDate!=null">
+            install_date=#{installDate},
+        </if>
+        <if test="address!=null">
+            sa_address=#{address},
+        </if>
+        <if test="detectionDate!=null">
+            detection_date=#{detectionDate},
+        </if>
+        <if test="smokeConcentration!=null">
+            smoke_concentration=#{smokeConcentration},
+        </if>
+        <if test="detectionDesc!=null">
+            detection_desc=#{detectionDesc}
+        </if>
+
+        where is_delete=0 and id=#{id}
+    </update>
+
+    <update id="delete">
+        update smoke_alarm set is_delete=1
+        where is_delete=0 and id = #{id, jdbcType=INTEGER}
+    </update>
+</mapper>

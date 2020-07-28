@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns th="http://www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>编辑用户</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" type="text/css" href="../static/lib/bootstrap/css/bootstrap.css">
+
+    <link rel="stylesheet" type="text/css" href="../static/stylesheets/theme.css">
+    <link rel="stylesheet" href="../static/lib/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="../static/lib/bootstrap/css/bootstrap-datetimepicker.min.css">
+    <script src="../static/lib/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <!-- Demo page code -->
+
+    <style type="text/css">
+        #line-chart {
+            height:300px;
+            width:800px;
+            margin: 0px auto;
+            margin-top: 1em;
+        }
+        .brand { font-family: georgia, serif; }
+        .brand .first {
+            color: #ccc;
+            font-style: italic;
+        }
+        .brand .second {
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+</head>
+
+<!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+<!--[if IE 7 ]> <body class="ie ie7 "> <![endif]-->
+<!--[if IE 8 ]> <body class="ie ie8 "> <![endif]-->
+<!--[if IE 9 ]> <body class="ie ie9 "> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<body>
+
+<!--<![endif]-->
+<div class="navbar">
+    <div class="navbar-inner">
+        <ul class="nav pull-right">
+
+
+            <li id="fat-menu" class="dropdown">
+                <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-user"></i> <p th:text="${session.user.name}"/>
+                    <i class="icon-caret-down"></i>
+                </a>
+
+                <ul class="dropdown-menu">
+                    <!--<li><a tabindex="-1" href="#">My Account</a></li>
+                    <li class="divider"></li>
+                    <li><a tabindex="-1" class="visible-phone" href="#">Settings</a></li>
+                    <li class="divider visible-phone"></li>-->
+                    <li><a tabindex="-1" th:href="@{'editUser?id='+${session.user.id}}">修改信息</a></li>
+                    <li><a tabindex="-1" th:href="login">退出</a></li>
+                </ul>
+            </li>
+
+        </ul>
+        <a class="brand" href="old_index.html"><span class="first">皓星士</span> <span class="second">后台管理系统</span></a>
+    </div>
+</div>
+
+<div class="sidebar-nav">
+    <div>
+        <a href="#dashboard-menu" class="nav-header" data-toggle="collapse"><i class="icon-dashboard"></i>产品管理</a>
+        <ul id="dashboard-menu" class="nav nav-list collapse in">
+            <li ><a href="index_0_0_0">产品列表</a></li>
+
+        </ul>
+    </div>
+    <div class="userManager">
+        <a href="#accounts-menu" class="nav-header" data-toggle="collapse"><i class="icon-briefcase"></i>用户管理</a>
+        <ul id="accounts-menu" class="nav nav-list collapse">
+            <li ><a href="users_0_0_0">用户列表</a></li>
+
+        </ul>
+    </div>
+
+</div>
+
+<div class="content">
+
+    <div class="header">
+
+        <h1 class="page-title">编辑用户</h1>
+    </div>
+
+    <ul class="breadcrumb">
+        <!--<li><a href="old_index.html">Home</a> <span class="divider">/</span></li>
+        <li><a href="users.html">Users</a> <span class="divider">/</span></li>
+        <li class="active">User</li>-->
+        <li class="active">   </li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <form id="projectForm" action="userManager" method="POST">
+            <div class="btn-toolbar">
+                <button class="btn btn-primary"  id="submitButton"><i class="icon-save"></i> 保存</button>
+                <!-- <a href="#myModal" data-toggle="modal" class="btn">Delete</a>-->
+                <div class="btn-group">
+                </div>
+            </div>
+            <div class="well">
+                <!--<ul class="nav nav-tabs">
+                    <li class="active"><a href="#home" data-toggle="tab">Profile</a></li>
+                    <li><a href="#profile" data-toggle="tab">Password</a></li>
+                </ul>-->
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane active in" id="home">
+                        <form id="tab">
+                            <label>用户名</label>
+                            <input type="text" id="username" name="name" th:value="${data.name}" class="input-xlarge">
+                            <label>密码</label>
+                            <input type="password" id="password" name="password" th:value="${data.password}" class="input-xlarge">
+                            <div class="userRole">
+                                <label >用户角色</label>
+                                <select name="role" id="sel"  style="width:284px;">
+                                    <option value ="1" >管理员</option>
+                                    <option value ="2" >普通用户</option>
+                                </select>
+                            </div>
+                            <label>联系地址</label>
+                            <textarea value="Smith" rows="3" id="address" name="address" th:text="${data.address}" class="input-xlarge">
+                            </textarea>
+                            <label>手机</label>
+                            <input type="text" id="tel" name="tel" th:value="${data.tel}" class="input-xlarge">
+                            <input type="hidden" name="id" th:value="${data.id}"/>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+            </form>
+            <div class="modal small hide fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">Delete Confirmation</h3>
+                </div>
+                <div class="modal-body">
+
+                    <p class="error-text"><i class="icon-warning-sign modal-icon"></i>Are you sure you want to delete the user?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button class="btn btn-danger" data-dismiss="modal">Delete</button>
+                </div>
+            </div>
+
+
+
+            <footer>
+                <hr>
+
+
+                <p class="pull-right">Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
+
+                <p>&copy; 2012 <a href="#" target="_blank">Portnine</a></p>
+            </footer>
+
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    $("#submitButton").click(function () {
+        return checkForm();
+    })
+    function checkForm(){
+
+        if($('#address').val() == ""){
+            alert("联系地址不能为空");
+            return false;
+        }
+    }
+
+    var role = [[${data.role}]];//获取待修改的用户角色
+    $("#sel").val(role);//将用户角色设置默认值
+
+    //显示提示信息
+    $(document).ready(function () {
+        var role = [[${session.user.role}]];
+        if (role != 1) {
+            //让labe隐藏
+            $('.userRole').hide();
+            $('.userManager').hide();
+
+        }
+        var msg =[[${msg}]];
+        if (msg != null) {
+            alert(msg);
+        }
+
+    });
+</script>
+</body>
+</html>
